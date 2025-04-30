@@ -5,35 +5,17 @@ class Solution(object):
         :type amount: int
         :rtype: int
         """
-
-        res = 0
-        sum = 0
-        aux = amount
-
         if amount == 0:
-            return res
+            return 0
 
         coins.sort()
 
-        print(f"coins: {coins}")
+        dp = [amount + 1] * (amount + 1)
+        dp[0] = 0
 
-        for coin in reversed(coins):
-            print(f"res: {res} sum: {sum} aux: {aux}")
-            if coin == 0 or coin > aux:
-                continue
+        for num in range(1, amount + 1):
+            for coin in coins:
+                if num - coin >= 0:
+                    dp[num] = min(dp[num], 1 + dp[num-coin])
 
-            if aux / coin >= 0:
-                res += int(aux/coin)
-                sum += coin * int(aux/coin)
-                aux = aux % coin
-
-            print(f"res: {res} sum: {sum} aux: {aux}")
-
-        if sum < amount:
-            return -1
-
-        return res
-
-
-sol = Solution()
-print(sol.coinChange([186, 419, 83, 408], 6249))
+        return dp[amount] if dp[amount] != amount + 1 else -1
