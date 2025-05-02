@@ -6,27 +6,23 @@ class Solution(object):
         :rtype: int
         """
 
-        def bs(arr, low, high, target):
-            if high >= low:
-                mid = (high + low) // 2
+        l, r = 0, len(nums)-1
 
-                if arr[mid] == target:
-                    return mid
-                elif arr[mid] > target:
-                    return bs(arr, low, mid-1, target)
+        while l <= r:
+            mid = (l + r) // 2
+            if target == nums[mid]:
+                return mid
+
+            if nums[l] <= nums[mid]:
+                if target > nums[mid] or target < nums[l]:
+                    l = mid + 1
                 else:
-                    return bs(arr, mid+1, high, target)
+                    r = mid - 1
 
             else:
-                return -1
+                if target < nums[mid] or target > nums[r]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
 
-        original_index = 0
-        for i in range(1, len(nums)):
-            if nums[i] < nums[i-1]:
-                original_index = i
-
-        nums.sort()
-
-        result = bs(nums, 0, len(nums)-1, target)
-
-        return result if result == -1 else result + original_index
+        return -1
