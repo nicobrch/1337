@@ -9,34 +9,21 @@ class Solution:
         if s[0] == ')' or s[0] == ']' or s[0] == '}':
             return False
 
-        stack_round = deque()
-        stack_square = deque()
-        stack_curly = deque()
+        stack = deque()
 
-        for char in s:
-            if char == '(':
-                stack_round.append(char)
-            elif char == '[':
-                stack_square.append(char)
-            elif char == '{':
-                stack_curly.append(char)
+        closeToOpen = {
+            ')': '(',
+            ']': '[',
+            '}': '{'
+        }
 
-            if char == ')':
-                if len(stack_round) > 0:
-                    stack_round.pop()
+        for c in s:
+            if c in closeToOpen:
+                if stack and stack[-1] == closeToOpen[c]:
+                    stack.pop()
                 else:
                     return False
+            else:
+                stack.append(c)
 
-            if char == ']':
-                if len(stack_square) > 0:
-                    stack_square.pop()
-                else:
-                    return False
-
-            if char == '}':
-                if len(stack_curly) > 0:
-                    stack_curly.pop()
-                else:
-                    return False
-
-        return True
+        return True if not stack else False
